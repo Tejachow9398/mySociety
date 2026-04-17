@@ -1,45 +1,96 @@
-import { Tabs } from 'expo-router';
+// File: app/(tabs)/_layout.tsx
 import React from 'react';
-import { Platform } from 'react-native';
+import { Tabs } from 'expo-router';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+// This is a custom component for our central SOS button
+const SosTabBarButton = () => (
+  <TouchableOpacity style={styles.sosButtonContainer}>
+    <View style={styles.sosButton}>
+      <Text style={{ color: '#FFFFFF', fontSize: 18 }}>SOS</Text>
+    </View>
+  </TouchableOpacity>
+);
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarActiveTintColor: '#3B82F6',
+        tabBarInactiveTintColor: '#6B7280',
+        tabBarStyle: {
+          height: 80,
+          borderTopWidth: 1,
+          borderTopColor: '#E5E7EB',
+          paddingBottom: 10,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          marginTop: -5,
+        },
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 24 }}>🏠</Text>, // Using an emoji
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="chats"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Chats',
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 24 }}>💬</Text>, // Using an emoji
+        }}
+      />
+      <Tabs.Screen
+        name="sos"
+        options={{
+          title: '',
+          tabBarButton: () => <SosTabBarButton />,
+        }}
+      />
+      <Tabs.Screen
+        name="visitors"
+        options={{
+          title: 'Visitors',
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 24 }}>🛡️</Text>, // Using an emoji
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 24 }}>👤</Text>, // Using an emoji
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  sosButtonContainer: {
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sosButton: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#EF4444',
+    justifyContent: 'center',
+    alignItems: 'center',
+    transform: [{ translateY: -25 }],
+    shadowColor: '#EF4444',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 8,
+    borderWidth: 4,
+    borderColor: 'white',
+  },
+});
